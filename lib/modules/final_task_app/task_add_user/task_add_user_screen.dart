@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fristapp/layout/final_task_app/cubit/cubit.dart';
 import 'package:fristapp/layout/final_task_app/cubit/states.dart';
 import 'package:fristapp/model/final_task/Task_user_model.dart';
+import 'package:fristapp/modules/final_task_app/task_home/task_home_screen.dart';
 import 'package:fristapp/shared/component/component.dart';
 import 'package:fristapp/shared/styles/icon_broken.dart';
 import 'package:intl/intl.dart';
@@ -30,17 +31,27 @@ class TaskAddUserScraan extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<FinalTaskCubit, TaskStates>(
-      listener: (context, state) {},
+      listener: (context, state) {              
+      },
       builder: (context, state) {
-        if(state is TaskAddUserSuccessState)
-        showToast(msg: "Added Successfuly", state: toastStates.SUCCESS);
+        if(state is TaskAddUserSuccessState){
+          FinalTaskCubit.get(context).UsersList=[];
+          FinalTaskCubit.get(context).getAllUsers();
+          showToast(msg: "Added Successfuly", state: toastStates.SUCCESS);
+          //FinalTaskCubit.get(context).currentIndex=0;
+          FinalTaskCubit.get(context).changeBottomNav(0);
+          nameController = TextEditingController();
+          bioController = TextEditingController();
+          phoneController = TextEditingController();
+          ageController = TextEditingController();
+          birthDayController = TextEditingController();
+        }
+        
         else if (state is TaskAddUserErrorsState ) 
         showToast(
           msg: state.Error.toString(), 
           state: toastStates.ERROR
           );
-        
-
         // var userModel = TaskCubit.get(context).Usermodel;
         // var profileImage = TaskCubit.get(context).profileImage;
         // var coverImage = TaskCubit.get(context).coverImage;
@@ -48,7 +59,6 @@ class TaskAddUserScraan extends StatelessWidget {
         // nameController.text = userModel!.name;
         // phoneController.text = userModel.phone;
         // bioController.text = userModel.bio;
-
         return Scaffold(
           body: SingleChildScrollView(
             child: Padding(
